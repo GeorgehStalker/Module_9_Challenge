@@ -1,0 +1,21 @@
+-- 7. List each employee in the Sales and Development departments, including their employee number, last name, first name, and department name
+-- NOTE: To simplify the response, we will only show the WITH clause as the most efficient way to get the resultset.
+WITH sales_development_department AS (
+    SELECT 
+        emp_no 
+    FROM dept_emp 
+    INNER JOIN departments
+    ON dept_emp.dept_no = departments.dept_no
+    WHERE departments.dept_name IN ('Sales', 'Development')
+)
+SELECT
+    e.emp_no as "Employee Number",  -- Employee number
+    e.first_name as "First Name",  -- First name
+    e.last_name as "Last Name",  -- Last name
+    d.dept_name as "Department Name"  -- Department name
+FROM employees e
+INNER JOIN dept_emp de
+ON e.emp_no = de.emp_no
+INNER JOIN departments d
+ON de.dept_no = d.dept_no
+WHERE e.emp_no IN (SELECT emp_no FROM sales_development_department);
